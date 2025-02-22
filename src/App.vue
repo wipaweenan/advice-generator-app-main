@@ -1,38 +1,54 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { VueSpinner } from 'vue3-spinners';
 
 import SvgImage from '/src/images/pattern-divider-desktop.svg';
 import Dice from '/src/images/icon-dice.svg';
 
 const items = ref({});
+const isLoading = ref(true);
 
 const fetchAdvice = async () => {
+  isLoading.value = true;
   try {
     const response = await axios.get('https://api.adviceslip.com/advice');
     items.value = response.data.slip;
-    console.log("New Advice:", response.data.slip);
   } catch (error) {
     console.error("Error fetching data:", error);
+  } finally {
+    isLoading.value = false;
   }
 };
 
-// เรียก API ครั้งแรกเมื่อ Component โหลด
 onMounted(fetchAdvice);
 </script>
 
 <template>
-  <div class="container">
-    <span class="title">ADVICE# {{ items.id }}</span>
-    <span class="quote">"{{ items.advice }}"</span>
-    <img :src="SvgImage" alt="divider" />
-    <div class="button" @click="fetchAdvice">
-      <img class="dice" :src="Dice" alt="dice button" />
+  <div >
+    <div v-if="isLoading" class="load">
+      <VueSpinner size="100" color="#52ffa8" />
+    </div>
+    <div v-else class="container">
+      <span class="title">ADVICE# {{ items.id }}</span>
+      <span class="quote">"{{ items.advice }}"</span>
+      <img :src="SvgImage" alt="divider" />
+      <div class="button" @click="fetchAdvice">
+        <img class="dice" :src="Dice" alt="dice button" />
+      </div>
     </div>
   </div>
 </template>
 
+
 <style scoped>
+.load {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
 .container {
   width: auto;
   display: flex;
@@ -44,6 +60,7 @@ onMounted(fetchAdvice);
   padding-bottom: 64px;
   gap: 24px;
   max-width: 500px;
+  
 }
 .title {
   text-align: center;
