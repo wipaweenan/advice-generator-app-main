@@ -1,0 +1,17 @@
+
+
+body {
+  padding: 2px;
+  display: flex;
+  justify-content: center;
+  align-items:center;
+  min-height: 100vh;
+  background: hsl(218, 23%, 16%);
+  line-height: 1.6;
+  font-family:
+  Manrope,
+  sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
